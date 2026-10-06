@@ -244,9 +244,11 @@ h2 {
 /* ---------- Karusel realizací – sám jede, dá se posouvat rukou ---------- */
 
 .reel {
-  --peek: 72px;                     /* kolik je vidět z vedlejších fotek */
+  --peek: 72px;                     /* kolik je vidět z vedlejších fotek (mobil) */
+  --gap: 16px;
   --slide-ar: 16 / 9;               /* všechny fotky mají stejný tvar */
-  --slide-w: min(calc(100cqw - 2 * var(--peek)), calc(60svh * 16 / 9), 1180px);
+  /* prostřední + větší část (asi 70 %) vedlejších fotek */
+  --slide-w: calc((100cqw - 2 * var(--gap)) / 2.4);
   --ease: cubic-bezier(.22, .61, .36, 1);
   --slide-ms: 700ms;
   --auto-ms: 5000ms;
@@ -257,6 +259,9 @@ h2 {
 }
 
 .reel__stage { position: relative; container-type: inline-size; }
+@media (min-width: 1000px) {
+  .reel__stage { width: min(100% - 2 * var(--gutter), 1860px); margin-inline: auto; }   /* zarovnáno s obsahem pod karuselem */
+}
 
 .reel__viewport {
   overflow: hidden;
@@ -272,7 +277,7 @@ h2 {
 .reel__track {
   position: relative;
   display: flex;
-  gap: 16px;
+  gap: var(--gap);
   width: max-content;
   will-change: transform;
 }
@@ -297,7 +302,7 @@ h2 {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(12, 11, 40, .5);
+  background: rgba(12, 11, 40, .35);
   transition: opacity var(--slide-ms) var(--ease);
 }
 .reel__item.is-active .thumb { transform: none; }
@@ -310,15 +315,15 @@ h2 {
   z-index: 1;
   top: auto;
   bottom: 0;
-  padding: 56px 24px 20px;
+  padding: 44px 16px 14px;
   background: linear-gradient(to top, rgba(12, 11, 40, .85), rgba(12, 11, 40, .45) 55%, transparent);
   opacity: 0;
   transform: translateY(8px);
   transition: opacity .45s .25s, transform .45s .25s var(--ease);
 }
 .reel__item.is-active .thumb__label { opacity: 1; transform: none; }
-.thumb__title { display: block; font-size: 22px; line-height: 1.2; }
-.thumb__desc { display: block; margin-top: 4px; font-size: 16px; font-weight: 400; line-height: 1.35; opacity: .92; }
+.thumb__title { display: block; font-size: 18px; line-height: 1.2; }
+.thumb__desc { display: block; margin-top: 4px; font-size: 15px; font-weight: 400; line-height: 1.35; opacity: .92; }
 
 /* šipky po stranách */
 .reel__arrow {
@@ -342,8 +347,8 @@ h2 {
 .reel__arrow svg { width: 28px; height: 28px; fill: currentColor; }
 .reel__arrow:hover { background: var(--c-white); transform: translateY(-50%) scale(1.08); }
 .reel__arrow:focus-visible { outline: 3px solid var(--c-blue); outline-offset: 2px; }
-.reel__arrow--prev { left: max(12px, calc(50% - var(--slide-w) / 2 - 26px)); }
-.reel__arrow--next { right: max(12px, calc(50% - var(--slide-w) / 2 - 26px)); }
+.reel__arrow--prev { left: 12px; }
+.reel__arrow--next { right: 12px; }
 
 /* tečky pod fotkami – aktivní se protáhne a plní, než přijde další fotka */
 .reel__dots {
@@ -503,6 +508,7 @@ h2 {
 /* ---------- Tablet a mobil: fotky pod sebou ---------- */
 
 @media (max-width: 999px) {
+  .reel { --slide-w: calc((100cqw - 2 * var(--gap)) / 2); }   /* prostřední + půlka vedle */
   .row { flex-wrap: wrap; max-width: none; }
   .row--ba .tile { flex: 1 1 calc(50% - var(--gap)); }
 }
@@ -510,8 +516,7 @@ h2 {
 @media (max-width: 719px) {
   .row--ba .tile { flex-basis: 100%; }
   .row--ba .tile--half { flex-basis: calc(50% - var(--gap) / 2); }
-  .reel { --peek: 30px; --slide-ar: 4 / 3; --slide-w: calc(100cqw - 2 * var(--peek)); padding-top: 14px; }
-  .reel__track { gap: 6px; }
+  .reel { --peek: 30px; --gap: 6px; --slide-ar: 4 / 3; --slide-w: calc(100cqw - 2 * var(--peek)); padding-top: 14px; }
   .reel__item .thumb__label { padding: 40px 14px 12px; }
   .thumb__title { font-size: 17px; }
   .thumb__desc { font-size: 14px; }

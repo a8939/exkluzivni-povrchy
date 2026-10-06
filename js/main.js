@@ -79,7 +79,7 @@
   const dotsBox = reel.querySelector('.reel__dots');
   const originals = [...track.children];
   const count = originals.length;
-  const CLONES = 2;
+  const CLONES = 4;
 
   originals.forEach((slide, i) => {
     slide.dataset.i = i;
